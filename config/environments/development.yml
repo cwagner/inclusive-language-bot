@@ -1,0 +1,5 @@
+---
+:smee_webhook_url:
+:webserver:
+  :port: 9899
+  :host: localhost
