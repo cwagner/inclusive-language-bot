@@ -4,6 +4,6 @@
   :setting_2: 123
 :github:
   :authentication: app
-  :app_id: abcd
+  :app_id: 83626
   :app_private_key_path: "/path/to/github_app_key.pem"
-  :app_installation_id: pre-repo-install-id
+  :app_installation_id: 12225707
