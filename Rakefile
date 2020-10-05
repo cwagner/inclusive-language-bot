@@ -2,7 +2,8 @@
 require 'rubyprobot'
 spec = Gem::Specification.find_by_name 'rubyprobot'
 rakefile = "#{spec.gem_dir}/lib/tasks/Rakeloader"
-load rakefilenamespace :server do
+load rakefile
+namespace :server do
   require_relative 'HackTest'
 
   desc 'Start development smee.io listener and web server'
