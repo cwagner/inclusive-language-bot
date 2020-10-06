@@ -5,5 +5,5 @@
 :github:
   :authentication: app
   :app_id: 83626
-  :app_private_key_path: "/path/to/github_app_key.pem"
+  :app_private_key_path: "./test-app-hackweek-10-20.2020-10-05.private-key.pem"
   :app_installation_id: 12225707
