@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
 require_relative 'non_inclusive_words'
+require_relative 'pr_actions'
 require 'rubyprobot'
 require 'set'
 
 class Hacktest
   include Gem::RubyProbot
+  include Gem::RubyProbot::AWSInstance
+  extend Gem::RubyProbot::AWS
 
   def initialize
     register_handler(&method(:my_handler))
@@ -17,7 +20,11 @@ class Hacktest
       data_hash[:repository][:full_name],
       data_hash[:pull_request][:number]
     ) # TODO: handle pagination
-    search_files(files)
+    non_inclusive_words_found = search_files(files)
+
+    if data_hash.key?(:pull_request) && (PR_ACTIONS.include? data_hash[:action])
+      handle_pull_request(data_hash, non_inclusive_words_found)
+    end
   end
 
   private
@@ -55,5 +62,33 @@ class Hacktest
     else
       found_words[word] = Set[file_name]
     end
+  end
+
+  def handle_pull_request(pr_payload, non_inclusive_words_found)
+    remove_pr_comments(pr_payload)
+    add_pr_comment(pr_payload, 'Non inclusive words found:')
+  end
+
+  def remove_pr_comments(pr_payload)
+    comments = github_client.issue_comments(
+        pr_payload[:repository][:full_name],
+        pr_payload[:pull_request][:number])
+
+    comments.each do |comment|
+      comment_hash = comment.to_h
+      if comment_hash[:user][:login] == 'test-app-hackweek-10-20[bot]'
+        github_client.delete_comment(
+            pr_payload[:repository][:full_name],
+            comment_hash[:id])
+      end
+    end
+  end
+
+  def add_pr_comment(pr_payload, message)
+    github_client.add_comment(
+        pr_payload[:repository][:full_name],
+        pr_payload[:pull_request][:number],
+        message
+    )
   end
 end
