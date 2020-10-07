@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'non_inclusive_words'
+require_relative 'pr_actions'
 require 'rubyprobot'
 require 'set'
 
@@ -21,9 +22,7 @@ class Hacktest
     ) # TODO: handle pagination
     non_inclusive_words_found = search_files(files)
 
-    if data_hash.key?(:pull_request) &&
-        (data_hash[:action] == 'opened' || data_hash[:action] == 'ready_for_review' || data_hash[:action] == 'reopened' || data_hash[:action] == 'edited')
-
+    if data_hash.key?(:pull_request) && (PR_ACTIONS.include? data_hash[:action])
       handle_pull_request(data_hash, non_inclusive_words_found)
     end
   end
@@ -40,7 +39,7 @@ class Hacktest
       file_name = file_hash[:filename]
       search_lines(non_inclusive_words_found, lines, file_name)
     end
-    return non_inclusive_words_found
+    non_inclusive_words_found
   end
 
   def search_lines(found_words, lines, file_name)
