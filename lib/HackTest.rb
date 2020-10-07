@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-NON_INCLUSIVE_WORDS = %w[blacklist whitelist master slave].freeze
-
+require_relative 'non_inclusive_words'
 require 'rubyprobot'
 require 'set'
 
