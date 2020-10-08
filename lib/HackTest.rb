@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'comment_helper'
 require_relative 'non_inclusive_words'
 require_relative 'pr_actions'
 require 'rubyprobot'
@@ -22,9 +23,11 @@ class Hacktest
     ) # TODO: handle pagination
     non_inclusive_words_found = search_files(files)
 
-    if data_hash.key?(:pull_request) && (PR_ACTIONS.include? data_hash[:action])
-      handle_pull_request(data_hash, non_inclusive_words_found)
-    end
+    return unless data_hash.key?(:pull_request) && PR_ACTIONS.include?(data_hash[:action])
+
+    return if non_inclusive_words_found.empty?
+
+    handle_pull_request(data_hash, non_inclusive_words_found)
   end
 
   private
@@ -66,7 +69,7 @@ class Hacktest
 
   def handle_pull_request(pr_payload, non_inclusive_words_found)
     remove_pr_comments(pr_payload)
-    add_pr_comment(pr_payload, 'Non inclusive words found:')
+    add_pr_comment(pr_payload, CommentHelper.create_comment(non_inclusive_words_found))
   end
 
   def remove_pr_comments(pr_payload)
