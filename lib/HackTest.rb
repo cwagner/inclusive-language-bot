@@ -76,7 +76,7 @@ class Hacktest
 
     comments.each do |comment|
       comment_hash = comment.to_h
-      if comment_hash[:user][:login] == 'test-app-hackweek-10-20[bot]'
+      if comment_hash[:user][:login] == 'inclusive-language-bot[bot]'
         github_client.delete_comment(
             pr_payload[:repository][:full_name],
             comment_hash[:id])
