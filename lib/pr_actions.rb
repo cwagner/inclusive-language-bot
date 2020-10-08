@@ -1,5 +1,5 @@
 PR_ACTIONS = %w[
-  edited
+  synchronize
   opened
   reopened
 ].freeze
