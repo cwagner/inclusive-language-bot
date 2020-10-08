@@ -6,7 +6,7 @@ require_relative 'pr_actions'
 require 'rubyprobot'
 require 'set'
 
-class Hacktest
+class InclusiveLanguageBot
   include Gem::RubyProbot
   include Gem::RubyProbot::AWSInstance
   extend Gem::RubyProbot::AWS
